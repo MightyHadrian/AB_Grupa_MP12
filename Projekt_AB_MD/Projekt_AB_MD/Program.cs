@@ -2,6 +2,7 @@
 
     public class Modulo
     {
+        // Funkcja zwraca 0 jak liczba nie jest podzielna przez 2, zwraca 1 jak liczba jest podzielna
         public int Calculate(int number)
         {
             if (number % 2 != 0)
