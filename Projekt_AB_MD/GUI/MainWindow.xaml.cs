@@ -22,7 +22,24 @@ namespace GUI
     {
         public MainWindow()
         {
+            
             InitializeComponent();
+        }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            Ellipse newBall = new Ellipse();
+            newBall.Width = 10;
+            newBall.Height = 10;
+            newBall.Stroke = new SolidColorBrush(Colors.Black);
+            newBall.StrokeThickness = 1;
+            Canvas.SetLeft(newBall, 250);
+            Canvas.SetTop(newBall, 0);
+            BallCanvas.Children.Add(newBall);
+        }
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Stop!!");
         }
     }
 }
