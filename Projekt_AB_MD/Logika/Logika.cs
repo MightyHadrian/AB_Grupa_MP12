@@ -2,31 +2,18 @@
 
 namespace Logika
 {
-    public class Logic : Data
+    public class Logic
     {
-        private List<Ball>? Balls;
-        private static int genRandomInt(int x, int y)
-        {
-            Random random = new Random(); 
-            return random.Next(x, y);
-        }
-        private static double genRandomDouble()
-        {
-            Random random = new Random();
-            return random.NextDouble() * 10.0;
-        }
-        private static double calcKinEnergy(double x, double e)
-        {
-            return 0.5 * x * e;
-        }
+        public List<Data> Objects = new();
 
-        public override void addBall()
+        // Dodanie nowego obiektu, prędkość i masa losowo generowane, identyfikatorem jest ilość aktualnych kulek plus jeden
+        public void addBall()
         {
             try
             {
                 double Speed = genRandomDouble();
                 double Mass = genRandomDouble();
-                Balls.Add(new Ball(Balls.Count + 1, genRandomInt(150, 300), genRandomInt(150, 300), Mass, Speed, calcKinEnergy(Mass, Speed)));
+                Objects.Add(new Ball(Objects.Count + 1, genRandomInt(100, 700), genRandomInt(100, 700), Mass, Speed));
             }
             catch (Exception)
             {
@@ -34,29 +21,28 @@ namespace Logika
             }
         }
 
-        public override void delBall(int index)
+        // Usunięcie danego obiektu
+        public void delBall(int index)
         {
-            if (Balls != null)
+            try
             {
-                try
-                {
-                    Balls.RemoveAt(index);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: delBall, index: " + index);
-                }
+                Objects.RemoveAt(index);
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: delBall, index: " + index);
             }
         }
 
-        public override void resetBalls()
+        // Wygenerowanie na nowo stworzonych obiektów
+        public void resetBalls()
         {
-            if (Balls != null)
+            if (Objects != null)
             {
                 try
                 {
-                    int totalAmount = Balls.Count;
-                    Balls.Clear();
+                    int totalAmount = Objects.Count;
+                    Objects.Clear();
                     for (int i = 0; i < totalAmount; i++)
                         addBall();
                 }
@@ -67,159 +53,136 @@ namespace Logika
             }
         }
 
-        public override void setBallX(int index, int value)
+        // Losowanie wartości całkowitej z danego przedziału
+        private static int genRandomInt(int x, int y)
         {
-            if (Balls != null)
+            Random random = new(); 
+            return random.Next(x, y);
+        }
+
+        // Losowanie wartości zmiennoprzecinkowej z przedziału [0, 1] * 10
+        private static double genRandomDouble()
+        {
+            Random random = new();
+            return random.NextDouble() * 10.0 + 0.1;
+        }
+
+        // Obliczanie energii kinetycznej obiektu
+        public double calcKinEnergy(double x, double e)
+        {
+            return 0.5 * x * e;
+        }
+
+        // Obliczenie prędkości oraz energii po zderzeniu (zderzenie sprężyste, zasada zachowania pędu)
+        public void calcCollision(int indexOne, int indexTwo)
+        {
+            try
             {
-                try
-                {
-                    Balls.ElementAt(index).setX(value);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index + ", value: " + value);
-                }
+                double massOne = Objects.ElementAt(indexOne).objectMass, massTwo = Objects.ElementAt(indexTwo).objectMass;
+                double speedOne = Objects.ElementAt(indexOne).objectVelocity, speedTwo = Objects.ElementAt(indexTwo).objectVelocity;
+                double newSpeedOne = (speedOne * (massOne - massTwo) + 2 * massTwo * speedTwo) / (massOne + massTwo);
+                double newSpeedTwo = (speedTwo * (massTwo - massOne) + 2 * massOne * speedOne) / (massOne + massTwo);
+                Objects.ElementAt(indexOne).objectVelocity = newSpeedOne;
+                Objects.ElementAt(indexTwo).objectVelocity = newSpeedTwo;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: calcCollision, indexOne: " + indexOne + ", indexTwo:" + indexTwo);
             }
         }
 
-        public override void setBallY(int index, int value)
+        // Settery dla danych obiektów
+        public void setObjectX(int index, int value)
         {
-            if (Balls != null)
+            try
             {
-                try
-                {
-                    Balls.ElementAt(index).setY(value);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallY, index: " + index + ", value: " + value);
-                }
+                Objects.ElementAt(index).objectX = value;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: setObjectX, index: " + index);
+            }
+        }
+        public void setObjectY(int index, int value)
+        {
+            try
+            {
+                Objects.ElementAt(index).objectY = value;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: setObjectY, index: " + index);
             }
         }
 
-        public override void setBallVelocity(int index, double value)
+        // Gettery dla danych obiektów
+        public int getObjectID(int index)
         {
-            if (Balls != null)
+            try
             {
-                try
-                {
-                    Balls.ElementAt(index).setVelocity(value);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallVelocity, index: " + index + ", value: " + value);
-                }
+                return Objects.ElementAt(index).objectID;
             }
-        }
-        public override void setBallKinEnergy(int index, double value)
-        {
-            if (Balls != null)
+            catch (Exception)
             {
-                try
-                {
-                    Balls.ElementAt(index).setKinEnergy(value);
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallKinEnergy, index: " + index + ", value: " + value);
-                }
+                throw new ArgumentOutOfRangeException("Error: getObjectID, index: " + index);
             }
-        }
-        public override int getBallID(int index)
-        {
-            if (Balls != null)
-            {
-                try
-                {
-                    return Balls.ElementAt(index).getID();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
-            }
-            return -1;
         }
 
-        public override int getBallX(int index)
+        public int getObjectX(int index)
         {
-            if (Balls != null)
+            try
             {
-                try
-                {
-                    Balls.ElementAt(index).getX();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
+                return Objects.ElementAt(index).objectX;
             }
-            return -1;
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: getObjectX, index: " + index);
+            }
+        }
+        public int getObjectY(int index)
+        {
+            try
+            {
+                return Objects.ElementAt(index).objectY;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: getObjectY, index: " + index);
+            }
+        }
+        public double getObjectVelocity(int index)
+        {
+            try
+            {
+                return Objects.ElementAt(index).objectVelocity;
+            }
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: getObjectY, index: " + index);
+            }
         }
 
-        public override int getBallY(int index)
+        public double getObjectMass(int index)
         {
-            if (Balls != null)
+            try
             {
-                try
-                {
-                    Balls.ElementAt(index).getY();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
+                return Objects.ElementAt(index).objectMass;
             }
-            return -1;
+            catch (Exception)
+            {
+                throw new ArgumentOutOfRangeException("Error: getObjectY, index: " + index);
+            }
         }
 
-        public override double getBallVelocity(int index)
+        // Sprawdza czy lista obiektów jest pusta (na potrzeby testów)
+        public bool getListStatus()
         {
-            if (Balls != null)
-            {
-                try
-                {
-                    Balls.ElementAt(index).getVelocity();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
-            }
-            return 0;
-        }
-
-        public override double getBallMass(int index)
-        {
-            if (Balls != null)
-            {
-                try
-                {
-                    Balls.ElementAt(index).getMass();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
-            }
-            return -1;
-        }
-
-        public override double getBallKinEnergy(int index)
-        {
-            if (Balls != null)
-            {
-                try
-                {
-                    Balls.ElementAt(index).getKinEnergy();
-                }
-                catch (Exception)
-                {
-                    throw new ArgumentOutOfRangeException("Error: setBallX, index: " + index);
-                }
-            }
-            return -1;
+            if (Objects.Count == 0)
+                return true;
+            else
+                return false;
         }
 
     }
+
 }
