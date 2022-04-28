@@ -196,14 +196,14 @@ namespace Logika
             int count = Objects.Count;
             for (int i = 0; i < count; i++)
             {
-                int newcordX = Objects[i].objectX + genRandomInt(-100, 100);
+                int newcordX = Objects[i].objectX + genRandomInt(-2, 2);
                 if(newcordX > limitX) newcordX=limitX;
                 if(newcordX < 10) newcordX=10;
-                int newcordY = Objects[i].objectY + genRandomInt(-100, 100);
+                int newcordY = Objects[i].objectY + genRandomInt(-2, 2);
                 if(newcordY > limitY) newcordY=limitY;
                 if(newcordY < 10) newcordY=10;
-                setObjectX(i,limitX);
-                setObjectY(i,limitY);
+                setObjectX(i,newcordX);
+                setObjectY(i,newcordY);
             }
         }
     }

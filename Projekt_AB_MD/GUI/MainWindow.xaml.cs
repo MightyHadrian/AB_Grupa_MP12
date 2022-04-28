@@ -40,7 +40,7 @@ namespace GUI
                 BallList.addBall();
             }
             timer.Tick += Timer_Tick;
-            //timer.Start();
+            timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -50,7 +50,7 @@ namespace GUI
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            BallList.moveBalls();
+            timer.Stop();
         }
     }
 }
