@@ -1,14 +1,18 @@
-﻿namespace Dane
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace Dane
 {
-    public abstract class Data 
+    public abstract class Data : INotifyPropertyChanged
     {
         // Klasa abstrakcyjna umożliwiająca stworzenie własnych funkcji zajmujących się daną strukturą
         public abstract int objectID { get; }
         public abstract int objectX { get; set; }
-        public abstract int objectY { get; set; }
+        public abstract int objectY {get; set; }
         public abstract double objectVelocity { get; set; }
         public abstract double objectMass { get; }
-        
+
+        public abstract event PropertyChangedEventHandler? PropertyChanged;
     }
     public class Ball : Data
     {
@@ -17,6 +21,8 @@
         public int Y;
         public double Velocity;
         private readonly double Mass = 0.0;
+
+        public override event PropertyChangedEventHandler? PropertyChanged;
 
         public Ball(int ID, int X, int Y, double Mass, double Velocity)
         {
@@ -35,13 +41,21 @@
         public override int objectX 
         { 
             get { return X; }
-            set { X = value; }
+            set 
+            { 
+                X = value;
+                OnPropertyChanged();
+            }
         }
 
         public override int objectY
         {
             get { return Y; }
-            set { Y = value; }
+            set 
+            { 
+                Y = value;
+                OnPropertyChanged();
+            }
         }
 
         public override double objectVelocity
@@ -53,6 +67,11 @@
         public override double objectMass
         {
             get { return Mass; }
+        }
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
     }

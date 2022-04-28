@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Logika;
 
 namespace GUI
@@ -21,11 +22,13 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        Logic BallList = new Logic(760, 270);
+        Logic BallList = new Logic(750, 260);
+        DispatcherTimer timer = new DispatcherTimer();
         public MainWindow()
         {
             InitializeComponent();
             BallCanvasControl.ItemsSource = BallList.Objects;
+            timer.Interval = TimeSpan.FromMilliseconds(100);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -36,10 +39,18 @@ namespace GUI
             {
                 BallList.addBall();
             }
+            timer.Tick += Timer_Tick;
+            //timer.Start();
         }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            BallList.moveBalls();
+        }
+
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Stop!!");
+            BallList.moveBalls();
         }
     }
 }
