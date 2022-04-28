@@ -19,7 +19,26 @@
         <TextBox x:Name="BallCountInput" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="96,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="27"/>
         <Button x:Name="StartButton" Click="StartButton_Click"  Grid.Column="2" Content="Start" HorizontalAlignment="Left" Height="22" Margin="137,50,0,0" VerticalAlignment="Top" Width="96" Background="#FFB9DCFD"/>
         <Button x:Name="StopButton" Click="StopButton_Click" Grid.Column="2" Content="Stop" HorizontalAlignment="Left" Height="22" Margin="238,50,0,0" VerticalAlignment="Top" Width="96" Background="#FFFDB9B9"/>
+        <!--
         <Canvas x:Name="BallCanvas" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="270" Margin="22,117,0,0" VerticalAlignment="Top" Width="760" Background="#FF71B2ED"/>
-
+        -->
+        <ItemsControl Name="BallCanvasControl">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas x:Name="BallCanvas" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="270" Margin="22,117,0,0" VerticalAlignment="Top" Width="760" Background="#FF71B2ED"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding Path=objectX}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Path=objectY}"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Ellipse Width="10" Height="10" Fill="Red"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>

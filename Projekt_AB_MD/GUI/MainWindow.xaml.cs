@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Logika;
 
 namespace GUI
 {
@@ -20,22 +21,21 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        Logic BallList = new Logic(760, 270);
         public MainWindow()
         {
-            
             InitializeComponent();
+            BallCanvasControl.ItemsSource = BallList.Objects;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            Ellipse newBall = new Ellipse();
-            newBall.Width = 10;
-            newBall.Height = 10;
-            newBall.Stroke = new SolidColorBrush(Colors.Black);
-            newBall.StrokeThickness = 1;
-            Canvas.SetLeft(newBall, 250);
-            Canvas.SetTop(newBall, 0);
-            BallCanvas.Children.Add(newBall);
+            BallList.Objects.Clear();
+            int ballcount = Convert.ToInt32(BallCountInput.Text);
+            for(;ballcount>0; ballcount--)
+            {
+                BallList.addBall();
+            }
         }
         private void StopButton_Click(object sender, RoutedEventArgs e)
         {

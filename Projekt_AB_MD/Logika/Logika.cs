@@ -1,19 +1,27 @@
 ﻿using Dane;
+using System.Collections.ObjectModel;
 
 namespace Logika
 {
     public class Logic
     {
-        public List<Data> Objects = new();
-
+        public ObservableCollection<Data> Objects = new();
+        int limitX = 0;
+        int limitY = 0;
         // Dodanie nowego obiektu, prędkość i masa losowo generowane, identyfikatorem jest ilość aktualnych kulek plus jeden
+        public Logic(int limitX,int limitY)
+        {
+            Objects = new ObservableCollection<Data>();
+            this.limitX = limitX;
+            this.limitY = limitY;
+        }
         public void addBall()
         {
             try
             {
                 double Speed = genRandomDouble();
                 double Mass = genRandomDouble();
-                Objects.Add(new Ball(Objects.Count + 1, genRandomInt(100, 700), genRandomInt(100, 700), Mass, Speed));
+                Objects.Add(new Ball(Objects.Count + 1, genRandomInt(10, limitX), genRandomInt(5,limitY), Mass, Speed));
             }
             catch (Exception)
             {
