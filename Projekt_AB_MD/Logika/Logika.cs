@@ -6,15 +6,16 @@ namespace Logika
     public class Logic
     {
         public ObservableCollection<Data> Objects = new();
-        int limitX = 0;
-        int limitY = 0;
+        private readonly int limitX;
+        private readonly int limitY;
         // Dodanie nowego obiektu, prędkość i masa losowo generowane, identyfikatorem jest ilość aktualnych kulek plus jeden
-        public Logic(int limitX,int limitY)
+        public Logic(int limitX, int limitY)
         {
             Objects = new ObservableCollection<Data>();
             this.limitX = limitX;
             this.limitY = limitY;
         }
+
         public Logic()
         {
             Objects = new ObservableCollection<Data>();
@@ -199,17 +200,22 @@ namespace Logika
 
         public void moveBalls()
         {
-            int count = Objects.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Objects.Count; i++)
             {
                 int newcordX = Objects[i].objectX + genRandomInt(-2, 2);
-                if(newcordX > limitX) newcordX=limitX;
-                if(newcordX < 10) newcordX=10;
+                if(newcordX > limitX) 
+                    newcordX = limitX;
+                if(newcordX < 10) 
+                    newcordX = 10;
+
                 int newcordY = Objects[i].objectY + genRandomInt(-2, 2);
-                if(newcordY > limitY) newcordY=limitY;
-                if(newcordY < 10) newcordY=10;
-                setObjectX(i,newcordX);
-                setObjectY(i,newcordY);
+                if(newcordY > limitY) 
+                    newcordY = limitY;
+                if(newcordY < 10) 
+                    newcordY = 10;
+
+                setObjectX(i, newcordX);
+                setObjectY(i, newcordY);
             }
         }
     }

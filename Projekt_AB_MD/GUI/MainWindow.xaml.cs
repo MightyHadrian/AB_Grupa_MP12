@@ -22,13 +22,13 @@ namespace GUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        Logic BallList = new Logic(750, 260);
-        DispatcherTimer timer = new DispatcherTimer();
+        Logic BallList = new(760, 450);
+        DispatcherTimer timer = new();
         public MainWindow()
         {
             InitializeComponent();
             BallCanvasControl.ItemsSource = BallList.Objects;
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(10);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -46,6 +46,10 @@ namespace GUI
         private void Timer_Tick(object sender, EventArgs e)
         {
             BallList.moveBalls();
+        }
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            BallList.resetBalls();
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
