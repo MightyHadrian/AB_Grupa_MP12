@@ -15,6 +15,12 @@ namespace Logika
             this.limitX = limitX;
             this.limitY = limitY;
         }
+        public Logic()
+        {
+            Objects = new ObservableCollection<Data>();
+            this.limitX = 100;
+            this.limitY = 100;
+        }
         public void addBall()
         {
             try
