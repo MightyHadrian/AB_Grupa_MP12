@@ -83,7 +83,7 @@ namespace Logika
         }
 
         // Obliczanie energii kinetycznej obiektu
-        public double calcKinEnergy(double x, double e)
+        public static double calcKinEnergy(double x, double e)
         {
             return 0.5 * x * e;
         }

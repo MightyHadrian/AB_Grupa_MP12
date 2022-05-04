@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Logika;
 
-namespace GUI
+namespace Prezentacja
 {
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        Logic BallList = new(760, 450);
-        DispatcherTimer timer = new();
+        private readonly Logic BallList = new(760, 450);
+        private readonly DispatcherTimer timer = new();
         public MainWindow()
         {
             InitializeComponent();
