@@ -3,42 +3,45 @@ using System.Runtime.CompilerServices;
 
 namespace Dane
 {
-    public abstract class Obiekt {
-        public static Obiekt newBall(int ID, int X, int Y, double Mass, double Velocity)
+    public abstract class BallApi {
+        public static BallApi Create(int ID, double X, double Y, double Mass, double VelocityX, double VelocityY)
         {
-            return new Ball(ID, X, Y, Mass, Velocity);
+            return new Ball(ID, X, Y, Mass, VelocityX, VelocityY);
         }
 
         public abstract void objectMove();
         public abstract int objectID { get; }
         public abstract double objectX { get; set; }
         public abstract double objectY { get; set; }
-        public abstract double objectVelocity { get; set; }
+        public abstract double objectVelocityX { get; set; }
+        public abstract double objectVelocityY { get; set; }
         public abstract double objectMass { get; }
 
         public abstract event PropertyChangedEventHandler? PropertyChanged;
-        internal class Ball : Obiekt, INotifyPropertyChanged
+        internal class Ball : BallApi, INotifyPropertyChanged
         {
             private readonly int ID = 0;
             public double X;
             public double Y;
-            public double Velocity;
+            public double VelocityX;
+            public double VelocityY;
             private readonly double Mass = 0.0;
-
             public override event PropertyChangedEventHandler? PropertyChanged;
 
-            public Ball(int ID, int X, int Y, double Mass, double Velocity)
+            public Ball(int ID, double X, double Y, double Mass, double VelocityX, double VelocityY)
             {
                 this.ID = ID;
                 this.X = X;
                 this.Y = Y;
                 this.Mass = Mass;
-                this.Velocity = Velocity;
+                this.VelocityX = VelocityX;
+                this.VelocityY = VelocityY;
             }
+
             public override void objectMove()
             {
-                X += Velocity;
-                Y += Velocity;
+                X += VelocityX;
+                Y += VelocityY;
             }
 
             public override int objectID
@@ -66,12 +69,21 @@ namespace Dane
                 }
             }
 
-            public override double objectVelocity
+            public override double objectVelocityX
             {
-                get => Velocity;
+                get => VelocityX;
                 set 
                 { 
-                    Velocity = value; 
+                    VelocityX = value; 
+                }
+            }
+
+            public override double objectVelocityY
+            {
+                get => VelocityY;
+                set
+                {
+                    VelocityY = value;
                 }
             }
 
@@ -85,7 +97,5 @@ namespace Dane
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
             }
         }
-
     }
-
 }
