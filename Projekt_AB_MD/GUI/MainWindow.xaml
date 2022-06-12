@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Prezentacja"
         mc:Ignorable="d"
-        Title="Symulator kulek" Height="580" Width="815">
+        Title="Symulator kulek" Height="575" Width="820">
     <Grid Margin="0,0,0,52">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="57*"/>
@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="BallMessage" HorizontalAlignment="Left" Height="20" Margin="22,36,0,0" TextWrapping="Wrap" Text="Wpisz ilosc kulek na planszy:" VerticalAlignment="Top" Width="152" RenderTransformOrigin="0.5,0.471" Grid.ColumnSpan="3"/>
         <TextBlock Grid.Column="3" HorizontalAlignment="Left" Height="20" Margin="90,36,0,0" TextWrapping="Wrap" Text="Autorzy: " VerticalAlignment="Top" Width="45"/>
-        <TextBlock Grid.Column="3" HorizontalAlignment="Left" Height="34" Margin="142,28,0,0" TextWrapping="Wrap" Text="Mateusz Dargiel Adrian Bronowski" VerticalAlignment="Top" Width="95"/>
+        <TextBlock Grid.Column="3" HorizontalAlignment="Left" Height="20" Margin="142,36,0,0" TextWrapping="Wrap" Text="Adrian Bronowski" VerticalAlignment="Top" Width="95"/>
         <TextBox x:Name="BallCountInput" Grid.Column="2" HorizontalAlignment="Left" Height="16" Margin="96,36,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="27"/>
         <Button x:Name="StartButton" Click="StartButton_Click"  Grid.Column="2" Content="Start" HorizontalAlignment="Left" Height="20" Margin="140,34,0,0" VerticalAlignment="Top" Width="96" Background="#FFB9DCFD"/>
         <Button x:Name="ResetButton" Click="ResetButton_Click" Grid.Column="2" Content="Reset" HorizontalAlignment="Left" Height="20" Margin="235,34,0,0" VerticalAlignment="Top" Width="96" Background="#FFFDB9"/>

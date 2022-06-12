@@ -5,37 +5,49 @@ namespace Logika
 {
     public abstract class LogicApi
     {
-        public static LogicApi CreateLogic(DataApi? data, int limitX, int limitY)
+        public static LogicApi CreateLogic(int limitX, int limitY)
         {
-            return new BallLogic(data ?? DataApi.Create(), limitX, limitY);
+            return new BallLogic(DataApi.Create(), limitX, limitY);
         }
 
+        public abstract void Start();
+        public abstract void Stop();
         public abstract void addObject();
         public abstract void delObject(int index);
         public abstract void resetObjects();
         public abstract void calcCollision(BallApi ballOne, BallApi ballTwo);
+        public abstract bool ballCollision(double X, double Y);
+        public abstract ObservableCollection<BallApi> getList();
 
         // Dodanie nowego obiektu, prędkość i masa losowo generowane, identyfikatorem jest ilość aktualnych kulek plus jeden
         internal class BallLogic : LogicApi
         {
-            public ObservableCollection<DataApi> Objects;
+            private DataApi Objects;
             private readonly int limitX;
             private readonly int limitY;
 
             public BallLogic(DataApi? data, int limitX, int limitY)
             {
-                Objects.Add(data ?? DataApi.Create());
+                Objects = data ?? DataApi.Create();
                 this.limitX = limitX;
                 this.limitY = limitY;
+            }
+
+            public override void Start()
+            {
+                Objects.Start();
+            }
+
+            public override void Stop()
+            {
+                Objects.Stop();
             }
 
             public override void addObject()
             {
                 try
                 {
-                    DataApi data = DataApi.Create();
-                    data.addBall(Objects.Count + 1, genRandomInt(10, limitX), genRandomInt(5, limitY), genRandomDouble(), genRandomDouble(), genRandomDouble());
-                    Objects.Add(data);
+                    Objects.addBall(Objects.getBalls().Count + 1, genRandomInt(10, limitX), genRandomInt(5, limitY), genRandomDouble(), genRandomDouble(), genRandomDouble());
                 }
                 catch (Exception)
                 {
@@ -48,7 +60,7 @@ namespace Logika
             {
                 try
                 {
-                    Objects.RemoveAt(index);
+                    Objects.getBalls().RemoveAt(index);
                 }
                 catch (Exception)
                 {
@@ -59,23 +71,16 @@ namespace Logika
             // Wygenerowanie na nowo stworzonych obiektów
             public override void resetObjects()
             {
-                if (Objects != null)
+                try
                 {
-                    try
-                    {
-                        DataApi data;
-                        int totalAmount = Objects.Count;
-                        Objects.Clear();
-                        for (int i = 0; i < totalAmount; i++) {
-                            data = DataApi.Create();
-                            data.addBall(Objects.Count + 1, genRandomInt(10, limitX), genRandomInt(5, limitY), genRandomDouble(), genRandomDouble(), genRandomDouble());
-                            Objects.Add(data);
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        throw new InvalidOperationException("Error: resetBalls");
-                    }
+                    int i = Objects.getBalls().Count();
+                    Objects = DataApi.Create();
+                    for (; i > 0; i--)
+                        Objects.addBall(i, genRandomInt(10, limitX), genRandomInt(5, limitY), genRandomDouble(), genRandomDouble(), genRandomDouble());
+                }
+                catch (Exception)
+                {
+                    throw new InvalidOperationException("Error: resetBalls");
                 }
             }
 
@@ -114,6 +119,17 @@ namespace Logika
                 {
                     throw new ArgumentOutOfRangeException("Error: calcCollision, ballOneID: " + ballOne.objectID + ", ballTwoID:" + ballTwo.objectID);
                 }
+            }
+
+            public override bool ballCollision(double X, double Y)
+            {
+                foreach (BallApi ball in Objects.getBalls())
+                {
+                    double distance = Math.Sqrt((X - ball.objectX) * (X - ball.objectX) + (Y - ball.objectY) * (Y - ball.objectY));
+                    if (distance <= 20)
+                        return false;
+                }
+                return true;
             }
 
             // Settery dla danych obiektów
@@ -209,10 +225,15 @@ namespace Logika
                 }
             }
 
-            // Sprawdza czy lista obiektów jest pusta (na potrzeby testów)
-            public bool getListStatus()
+            public override ObservableCollection<BallApi> getList()
             {
-                if (Objects.Count == 0)
+                return Objects.getBalls();
+            }
+
+            // Sprawdza czy lista obiektów jest pusta (na potrzeby testów)
+            public bool listEmpty()
+            {
+                if (Objects.getBalls().Count == 0)
                     return true;
                 else
                     return false;

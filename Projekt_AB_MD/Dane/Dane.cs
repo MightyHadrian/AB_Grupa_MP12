@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace Dane
 {
@@ -13,12 +14,12 @@ namespace Dane
         public abstract void addBall(int ID, double X, double Y, double Mass, double VelocityX, double VelocityY);
         public abstract void Start();
         public abstract void Stop();
-        public abstract List<BallApi> getBalls();
+        public abstract ObservableCollection<BallApi> getBalls();
 
         internal class Data : DataApi
         {
-            private readonly List<BallApi> Balls;
-            private List<Thread>? Threads;
+            private readonly ObservableCollection<BallApi> Balls;
+            private List<Thread> Threads = new();
             private static readonly object locker = new();
             private static readonly object barrier = new();
             private bool Moving = false;
@@ -38,13 +39,15 @@ namespace Dane
                     while (Moving)
                     {
                         //critical section
-                        lock (locker)
+                        /*lock (locker)
                         {
                             Monitor.Enter(barrier);
                             newBall.objectMove();
                             Monitor.Exit(barrier);
-                        }
-                        Thread.Sleep(1);
+                        }*/
+                            newBall.objectMove();
+                        Console.WriteLine("Movement: " + ID.ToString());
+                            Thread.Sleep(1);
                     }
                 });
                 t.Name = ID.ToString();
@@ -56,9 +59,6 @@ namespace Dane
                 Moving = true;
                 foreach (Thread thread in Threads)
                     thread.Start();
-
-                foreach (Thread thread in Threads)
-                    thread.Join();
             }
 
             public override void Stop()
@@ -66,10 +66,11 @@ namespace Dane
                 Moving = false;
             }
 
-            public override List<BallApi> getBalls()
+            public override ObservableCollection<BallApi> getBalls()
             {
                 return Balls;
             }
+
         }
 
     }
