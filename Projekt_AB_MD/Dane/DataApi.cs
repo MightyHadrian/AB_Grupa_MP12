@@ -56,6 +56,9 @@ namespace Dane
 
             public override void Start()
             {
+                foreach (Thread thread in Threads)
+                    thread.Abort();
+
                 Moving = true;
                 foreach (Thread thread in Threads)
                     thread.Start();
@@ -64,6 +67,8 @@ namespace Dane
             public override void Stop()
             {
                 Moving = false;
+                foreach (Thread thread in Threads)
+                    thread.Suspend();
             }
 
             public override ObservableCollection<BallApi> getBalls()
